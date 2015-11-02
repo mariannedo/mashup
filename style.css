@@ -1,0 +1,23 @@
+body { 
+    font-family: 'helvetica', arial, sans-serif;
+    text-align: center; 
+}
+
+.location-form { 
+    padding: 20px; 
+}
+
+label { 
+    display: block; 
+    margin-bottom: 10px;
+}
+
+.event-location { 
+    padding: 5px; 
+    font-size: 16px; 
+    border: 1px solid #888;
+}
+
+#map { 
+    margin: auto;
+}

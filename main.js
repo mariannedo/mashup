@@ -1,7 +1,17 @@
 var ShowShows = { 
     init: function() { 
+        $('#LocationForm').on('submit', function(e) { 
+            e.preventDefault(); 
+
+            ShowShows.getShows($('#EventLocation').val());
+        }); 
+    }, 
+
+    getShows: function(location) { 
+
+
         $.ajax({
-            url: "http://api.bandsintown.com/events/search.json?location=New+York,NY&radius=10&page=1&per_page=5&app_id=Marianne_JS_APP",
+            url: "http://api.bandsintown.com/events/search.json?location=" + location + "&radius=10&page=1&per_page=10&app_id=Marianne_JS_APP",
             dataType: "jsonp", 
 
         }).done(function(events) {
@@ -16,17 +26,17 @@ var ShowShows = {
     }, 
 
     createHtml: function(event) { 
-        var htmlBlock = '<div class="map-block">'; 
+        var htmlBlock = '<div class="map-block"><b>'; 
 
         for(var i = 0; i < event.artists.length; i++) { 
             htmlBlock += event.artists[i]['name'] + '<br/>'; 
         }
 
-        htmlBlock += event.venue.name + '<br/>'; 
+        htmlBlock += '</b>' + event.venue.name + '<br/>'; 
 
-        htmlBlock += new Date(event.datetime); 
+        htmlBlock += new Date(event.datetime) + '<br/>'; 
 
-        htmlBlock += '<a href="' + event.url + ' target="_blank">more details</a>';
+        htmlBlock += '<a href="' + event.url + '" target="_blank">more details</a>';
 
         htmlBlock += '</div>'; 
 
@@ -39,10 +49,6 @@ var ShowShows = {
             lng: venue.longitude
         };
 
-        var infowindow = new google.maps.InfoWindow({
-            content: htmlBlock
-        });
-
         var marker = new google.maps.Marker({
             position: newLoc,
             map: ShowShows.map,
@@ -50,7 +56,14 @@ var ShowShows = {
         });
 
         marker.addListener('click', function() {
-            infowindow.open(ShowShows.map, marker);
+            if(ShowShows.infowindow) { 
+                ShowShows.infowindow.close(); 
+            }
+
+            ShowShows.infowindow = new google.maps.InfoWindow({
+                content: htmlBlock
+            });
+            ShowShows.infowindow.open(ShowShows.map, marker);
         });
     },
 
@@ -72,6 +85,8 @@ var ShowShows = {
 
         return locationObj; 
     }, 
+
+    infoWindow: null, 
 
     initMap: function() { 
         ShowShows.map = new google.maps.Map(document.getElementById('map'), {
