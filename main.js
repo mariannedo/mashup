@@ -29,7 +29,7 @@ var ShowShows = {
         var htmlBlock = '<div class="map-block"><b>'; 
 
         for(var i = 0; i < event.artists.length; i++) { 
-            htmlBlock += event.artists[i]['name'] + '<br/>'; 
+            htmlBlock += event.artists[i].name + '<br/>'; 
         }
 
         htmlBlock += '</b>' + event.venue.name + '<br/>'; 
@@ -94,7 +94,7 @@ var ShowShows = {
             center: ShowShows.mapCenter
         });
     }
-}
+};
 
 
 $(document).ready(function() { 
